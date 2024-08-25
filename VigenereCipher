@@ -1,0 +1,47 @@
+
+class Utils:
+    def split_text(text, key_size):
+        split_text = []
+        for index in range(0, len(text), key_size):
+            split_text.append(text[index: index + key_size])
+
+        return split_text
+    
+class Vigenere:
+
+    def vigenere(text, key, alphabet, cipher):
+        result = ""
+
+        text = text.lower()
+
+        split_text = Utils.split_text(text, len(key))
+
+        dic_num = dict(zip(alphabet, range(len(alphabet))))
+        dic_letter = dict(zip(range(len(alphabet)), alphabet+' '))
+
+        for split in split_text:
+            i = 0
+            for letter in split:
+                if(cipher):
+                    num = (dic_num[letter] + dic_num[key[i]]) % len(alphabet)
+                else:
+                    num = (dic_num[letter] - dic_num[key[i]]) % len(alphabet)
+                result += dic_letter[num]
+                i += 1
+
+        return result
+    
+
+
+def main():
+    alphabet = "abcdefghijklmnopqrstuvwxyz "
+    cleartext = input ("Please enter the message will be encrypted: ")
+    key = input("Please enter your secret key: ")
+    ciphertext = Vigenere.vigenere(cleartext, key, alphabet, True)
+    print("clear text: " + cleartext)
+    print("encrypted: " + ciphertext)
+    print("decrypted: " + Vigenere.vigenere(ciphertext, key, alphabet, False))
+
+
+main()
+
